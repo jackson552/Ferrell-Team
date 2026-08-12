@@ -633,6 +633,93 @@ a.trust-strip__value:hover { color: var(--gold); }
 }
 
 /* ================================================
+   TEAM
+================================================ */
+.team__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.team-card {
+  overflow: hidden;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-xs);
+  transition: transform var(--ease), box-shadow var(--ease), border-color var(--ease);
+}
+
+.team-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--gold-light);
+  box-shadow: var(--shadow-lg);
+}
+
+.team-card__photo-placeholder {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(212,154,56,0.18) 0 19%, transparent 20%),
+    linear-gradient(145deg, #17191b, #050708);
+}
+
+.team-card__photo-placeholder span {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border: 1px solid rgba(212,154,56,0.55);
+  border-radius: 50%;
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.team-card__content { padding: 28px; }
+
+.team-card__eyebrow {
+  margin-bottom: 8px;
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+.team-card__name {
+  margin-bottom: 4px;
+  color: var(--charcoal);
+  font-family: var(--font-display);
+  font-size: 23px;
+  font-weight: 600;
+}
+
+.team-card__role {
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.team-card__bio {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+@media (max-width: 900px) {
+  .team__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 560px) {
+  .team__grid { grid-template-columns: 1fr; }
+}
+
+/* ================================================
    APP / QR SECTION
 ================================================ */
 .app-section {
