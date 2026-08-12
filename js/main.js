@@ -1,9 +1,9 @@
 /* ================================================
-   K MOORE TEAM — Main JavaScript
+   FERRELL TEAM — Main JavaScript
    - Sticky header shadow
    - Mobile hamburger menu
    - Smooth anchor scrolling (with header offset)
-   - Contact form validation + KW redirect
+   - Contact form validation + asynchronous Formspree submission
 ================================================ */
 
 (function () {
@@ -15,6 +15,8 @@
   const nav        = document.getElementById('nav');
   const form       = document.getElementById('contactForm');
   const formError  = document.getElementById('formError');
+  const formStatus = document.getElementById('formStatus');
+  const contactSubmit = document.getElementById('contactSubmit');
   const searchForm = document.getElementById('homeSearchForm');
   const imageBackedSections = document.querySelectorAll('.section--image-bg');
   const statsGroup = document.querySelector('.about__pillars');
@@ -129,6 +131,9 @@
       { label: 'Cincinnati, OH', type: 'Community', keywords: 'hamilton county greater cincinnati' },
       { label: 'Fairfield, OH', type: 'Community', keywords: 'butler county 45014' },
       { label: 'Hamilton, OH', type: 'Community', keywords: 'butler county 45011 45013' },
+      { label: 'Middletown, OH', type: 'Community', keywords: 'butler warren county 45042 45044' },
+      { label: 'Franklin, OH', type: 'Community', keywords: 'warren county 45005 dayton' },
+      { label: 'Dayton, OH', type: 'Community', keywords: 'montgomery county greater dayton' },
       { label: 'Blue Ash, OH', type: 'Community', keywords: 'hamilton county 45242' },
       { label: 'Loveland, OH', type: 'Community', keywords: 'hamilton clermont warren county 45140' },
       { label: 'Montgomery, OH', type: 'Community', keywords: 'hamilton county 45242' },
@@ -220,7 +225,7 @@
       closeSuggestions();
       const query = searchInput.value.trim();
       const searchPath = searchType === 'rent' ? 'rent' : 'sale';
-      const redirectUrl = new URL(`https://kmooreteam.kw.com/search/${searchPath}`);
+      const redirectUrl = new URL(`https://theferrellteam.kw.com/search/${searchPath}`);
       if (query) {
         redirectUrl.searchParams.set('q', query);
       }
@@ -466,7 +471,7 @@
   }
 
   /* ================================================
-     CONTACT FORM — validation + redirect to KW
+     CONTACT FORM — validation + asynchronous Formspree submission
   ================================================ */
   if (form) {
 
@@ -475,6 +480,7 @@
       field.addEventListener('input', function () {
         this.classList.remove('is-invalid');
         hideError();
+        hideStatus();
       });
     });
 
@@ -482,11 +488,13 @@
       cb.addEventListener('change', function () {
         // Re-run validation quietly so error clears if now valid
         if (allValid()) hideError();
+        hideStatus();
       });
     });
 
-    form.addEventListener('submit', function (e) {
+    form.addEventListener('submit', async function (e) {
       e.preventDefault();
+      hideStatus();
 
       if (!allValid()) {
         markInvalidFields();
@@ -494,11 +502,26 @@
         return;
       }
 
-      /*
-        Redirect to the KW contact page.
-        Update this URL if KW provides a specific contact form page.
-      */
-      window.location.href = 'https://kmooreteam.kw.com/';
+      hideError();
+      setSubmissionMetadata();
+      setSubmitting(true);
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' }
+        });
+
+        if (!response.ok) throw new Error('Formspree submission failed');
+
+        form.reset();
+        showStatus('success', 'Thank you! Your message has been sent successfully.');
+      } catch (error) {
+        showStatus('error', 'We could not send your message. Please try again in a moment.');
+      } finally {
+        setSubmitting(false);
+      }
     });
   }
 
@@ -613,7 +636,7 @@
       if (field.type === 'checkbox') {
         if (!field.checked) valid = false;
       } else {
-        if (!field.value.trim()) valid = false;
+        if (!field.checkValidity()) valid = false;
       }
     });
     return valid;
@@ -622,7 +645,7 @@
   function markInvalidFields() {
     form.querySelectorAll('[required]').forEach(function (field) {
       if (field.type === 'checkbox') return; // checkboxes styled via parent
-      if (!field.value.trim()) {
+      if (!field.checkValidity()) {
         field.classList.add('is-invalid');
       }
     });
@@ -638,6 +661,31 @@
     if (!formError) return;
     // Only hide if all required fields are now satisfied
     if (allValid()) formError.hidden = true;
+  }
+
+  function setSubmissionMetadata() {
+    form.elements.sourcePageUrl.value = window.location.href;
+    form.elements.documentReferrer.value = document.referrer || 'Direct visit';
+    form.elements.submissionTime.value = new Date().toISOString();
+  }
+
+  function setSubmitting(isSubmitting) {
+    if (!contactSubmit) return;
+    contactSubmit.disabled = isSubmitting;
+    contactSubmit.textContent = isSubmitting ? 'Sending…' : 'Send Message';
+  }
+
+  function showStatus(type, message) {
+    if (!formStatus) return;
+    formStatus.textContent = message;
+    formStatus.className = 'form__status form__status--' + type;
+    formStatus.hidden = false;
+    formStatus.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function hideStatus() {
+    if (!formStatus) return;
+    formStatus.hidden = true;
   }
 
 })();

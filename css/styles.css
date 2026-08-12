@@ -1,7 +1,7 @@
 /* ================================================
-   K MOORE TEAM — Main Stylesheet
+   FERRELL TEAM — Main Stylesheet
    Fonts: Playfair Display (headings) + Inter (body)
-   Colors: cream / warm beige / charcoal / muted gold
+   Colors: ivory / warm stone / near-black / Ferrell gold
 ================================================ */
 
 /* ================================================
@@ -9,18 +9,18 @@
 ================================================ */
 :root {
   /* Palette */
-  --cream:         #FAF8F4;
-  --beige:         #F0EBE1;
+  --cream:         #FBF9F4;
+  --beige:         #F2EDE3;
   --white:         #FFFFFF;
-  --charcoal:      #2A2A2A;
-  --dark:          #1C1A18;
-  --text-primary:  #2A2A2A;
-  --text-secondary:#6B6460;
-  --text-muted:    #9E9A97;
-  --border:        #E2DDD6;
-  --gold:          #C4A265;
-  --gold-hover:    #A8894F;
-  --gold-light:    #EFE3CB;
+  --charcoal:      #090B0D;
+  --dark:          #050708;
+  --text-primary:  #17191B;
+  --text-secondary:#5E6062;
+  --text-muted:    #898C8F;
+  --border:        #DED8CC;
+  --gold:          #D49A38;
+  --gold-hover:    #B77921;
+  --gold-light:    #F1DFC0;
 
   /* Shadows */
   --shadow-xs: 0 1px 4px  rgba(0,0,0,0.05);
@@ -85,7 +85,7 @@ ul { list-style: none; }
   isolation: isolate;
   overflow: hidden;
   background-color: var(--dark);
-  background-image: url('../Assets/housePicture1.png?v=20260520-2');
+  background-image: url('../NewClientMaterials/FerrellTeamBackgroundHouseCropped.jpg?v=20260811-1');
   background-size: cover;
   background-position: center;
 }
@@ -95,7 +95,7 @@ ul { list-style: none; }
   position: absolute;
   inset: -48px 0;
   z-index: 0;
-  background-image: url('../Assets/housePicture1.png?v=20260520-2');
+  background-image: url('../NewClientMaterials/FerrellTeamBackgroundHouseCropped.jpg?v=20260811-1');
   background-size: cover;
   background-position: center;
   transform: translate3d(0, var(--bg-shift), 0) scale(1.08);
@@ -239,7 +239,7 @@ ul { list-style: none; }
 .header__logo { flex-shrink: 0; }
 
 .logo-img {
-  height: 42px;
+  height: 52px;
   width: auto;
   display: block;
 }
@@ -636,7 +636,7 @@ a.trust-strip__value:hover { color: var(--gold); }
    APP / QR SECTION
 ================================================ */
 .app-section {
-  background: linear-gradient(135deg, #2A2A2A 0%, #3D3228 100%);
+  background: linear-gradient(135deg, #090B0D 0%, #241B0F 100%);
   color: var(--white);
 }
 
@@ -910,6 +910,39 @@ a.trust-strip__value:hover { color: var(--gold); }
   border-left: 3px solid #b94444;
 }
 
+.form__status {
+  font-size: 13px;
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid;
+}
+
+.form__status--success {
+  color: #27643a;
+  background: #f1faf3;
+  border-left-color: #3d8a53;
+}
+
+.form__status--error {
+  color: #b94444;
+  background: #fff4f4;
+  border-left-color: #b94444;
+}
+
+.form__honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+#contactSubmit:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
 /* ================================================
    FOOTER
 ================================================ */
@@ -933,7 +966,7 @@ a.trust-strip__value:hover { color: var(--gold); }
 }
 
 .footer__logo {
-  height: 40px;
+  height: 52px;
   width: auto;
   /* Invert to white so logo shows on dark background */
   filter: brightness(0) invert(1);
@@ -1551,9 +1584,17 @@ a.trust-strip__value:hover { color: var(--gold); }
 }
 
 .testimonial-card__name {
-  font-size: 14px;
+  margin-bottom: 12px;
+  font-family: var(--font-display);
+  font-size: 20px;
   font-weight: 600;
   color: var(--charcoal);
+}
+
+.testimonial-card > p:last-child {
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.75;
 }
 
 .testimonial-card__detail {
